@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="645.0" prefWidth="922.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <TextArea layoutX="14.0" layoutY="43.0" prefHeight="480.0" prefWidth="896.0" />
+      <TextArea editable="false" layoutX="14.0" layoutY="542.0" prefHeight="89.0" prefWidth="896.0" />
+      <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" text="Run" />
+      <ProgressBar layoutX="232.0" layoutY="14.0" prefHeight="25.0" prefWidth="676.0" progress="0.0" />
+      <TextField layoutX="141.0" layoutY="14.0" prefHeight="16.0" prefWidth="71.0" text="1" />
+      <Label layoutX="60.0" layoutY="14.0" prefHeight="25.0" prefWidth="81.0" text="Run X times:" />
+   </children>
+</AnchorPane>
