@@ -4,7 +4,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -23,18 +22,23 @@ public class Controller {
     }
 
     private void runScript() {
+        outputArea.clear();
+
         boolean isWindows = System.getProperty("os.name").toLowerCase().startsWith("windows");
-        String currentPath = new File("").getAbsolutePath();
         if (isWindows) {
             // TODO Check num of executions
-            // TODO Create task thread
             ScriptTask task = new ScriptTask("cmd /c kotlinc -script script.kts", 1);
-            task.messageProperty().addListener(((observable, oldValue, newValue) -> outputArea.appendText(newValue)));
+            task.messageProperty().addListener(((observable, oldValue, newValue) -> {
+                outputArea.setText(newValue);
+                // use append to get textArea to scroll to the bottom
+                outputArea.appendText("");
+            }));
 
             Thread taskThread = new Thread(task);
             taskThread.setDaemon(true);
             taskThread.start();
         }
+        // TODO implement for Linux
     }
 
     @FXML
@@ -46,6 +50,7 @@ public class Controller {
             BufferedWriter writer = new BufferedWriter(new FileWriter("script.kts", false));
             writer.write(code);
             writer.flush();
+            writer.close();
         } catch (IOException e) {
             System.err.println("Error when writing to file!");
             //TODO add error popup
