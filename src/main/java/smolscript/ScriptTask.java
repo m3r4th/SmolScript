@@ -20,9 +20,10 @@ public class ScriptTask extends Task<Integer> {
     @Override
     protected Integer call() throws Exception {
         // Run script
-        Process scriptProcess = null;
+        Process scriptProcess;
         try {
             String currentPath = new File("").getAbsolutePath();
+            updateValue(1);
             scriptProcess = Runtime.getRuntime().exec(command, null, new File(currentPath));
         } catch (IOException e) {
             System.err.println("Error on attempting to run script.");
@@ -45,6 +46,12 @@ public class ScriptTask extends Task<Integer> {
                 updateMessage(messageBuilder.toString());
             }
             messageBuilder.setLength(0);
+        }
+        scriptProcess.waitFor();
+        if (scriptProcess.exitValue() > 0) {
+            updateValue(-1);
+        } else {
+            updateValue(0);
         }
         return null;
     }
