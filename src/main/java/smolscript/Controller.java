@@ -6,6 +6,8 @@ import javafx.scene.control.TextArea;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class Controller {
 
@@ -14,6 +16,19 @@ public class Controller {
 
     @FXML
     private TextArea outputArea;
+
+    public void initialize() {
+        String text = "";
+        try {
+            text = new String(Files.readAllBytes(Paths.get("script.kts")));
+        } catch (IOException e) {
+        }
+        if (!text.equals("")) {
+            scriptArea.setText(text);
+        } else {
+            scriptArea.setText("println(\"Hello World\")");
+        }
+    }
 
     @FXML
     protected void onRunButtonClick() {
