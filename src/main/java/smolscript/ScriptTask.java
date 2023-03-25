@@ -32,7 +32,8 @@ public class ScriptTask extends Task<Integer> {
         }
 
         // Read script output
-        //TODO Replace buffered reader (Inputstream reader?)
+        // TODO read std.err too
+        // TODO Send progress
         try (InputStreamReader isr = new InputStreamReader(scriptProcess.getInputStream())) {
             int c;
             StringBuilder messageBuilder = new StringBuilder();

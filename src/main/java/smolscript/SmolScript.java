@@ -14,6 +14,8 @@ public class SmolScript extends Application {
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("SmolScript!");
         stage.setScene(scene);
+        stage.setMinHeight(500);
+        stage.setMinWidth(700);
         stage.show();
     }
 

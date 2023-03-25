@@ -1,26 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
             minWidth="-Infinity" prefHeight="668.0" prefWidth="922.0" xmlns="http://javafx.com/javafx/17.0.2-ea"
             fx:controller="smolscript.Controller">
-   <TextArea fx:id="scriptArea" layoutX="14.0" layoutY="43.0" prefHeight="480.0" prefWidth="896.0"
-             text="print(&quot;hello world&quot;)"/>
-   <TextArea fx:id="outputArea" editable="false" layoutX="13.0" layoutY="534.0" prefHeight="101.0"
-             prefWidth="896.0"/>
-   <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#onRunButtonClick"
-           text="Run"/>
-   <ProgressBar layoutX="267.0" layoutY="14.0" prefHeight="25.0" prefWidth="641.0" progress="0.0"/>
-   <TextField layoutX="130.0" layoutY="14.0" prefHeight="16.0" prefWidth="71.0" text="1"/>
-   <Label layoutX="60.0" layoutY="14.0" prefHeight="25.0" prefWidth="81.0" text="Run X times:"/>
-   <Button layoutX="212.0" layoutY="14.0" mnemonicParsing="false" onAction="#onSaveButtonClick"
-           text="Save"/>
-   <Circle fx:id="exitIndicator" fill="#e5ff00" layoutX="816.0" layoutY="654.0" radius="9.0" stroke="BLACK"
-           strokeType="INSIDE"/>
-   <Circle fx:id="runningIndicator" fill="WHITE" layoutX="899.0" layoutY="654.0" radius="9.0" stroke="BLACK"
-           strokeType="INSIDE"/>
-   <Label layoutX="835.0" layoutY="645.0" prefHeight="18.0" prefWidth="55.0" text="Running:"/>
-   <Label layoutX="746.0" layoutY="645.0" prefHeight="18.0" prefWidth="61.0" text="Exit code:"/>
+   <AnchorPane layoutX="10.0" layoutY="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0"
+               AnchorPane.topAnchor="10.0">
+      <Button mnemonicParsing="false" onAction="#onRunButtonClick" text="Run" AnchorPane.leftAnchor="0.0"
+              AnchorPane.topAnchor="0.0"/>
+      <ProgressBar layoutX="257.0" prefHeight="25.0" prefWidth="450.0" progress="0.0" AnchorPane.leftAnchor="257.0"
+                   AnchorPane.rightAnchor="195.0" AnchorPane.topAnchor="0.0"/>
+      <TextField layoutX="120.0" prefHeight="16.0" prefWidth="71.0" text="1" AnchorPane.leftAnchor="120.0"
+                 AnchorPane.topAnchor="0.0"/>
+      <Label layoutX="50.0" prefHeight="25.0" prefWidth="81.0" text="Run X times:" AnchorPane.leftAnchor="50.0"
+             AnchorPane.topAnchor="0.0"/>
+      <Button layoutX="202.0" mnemonicParsing="false" onAction="#onSaveButtonClick" text="Save"
+              AnchorPane.leftAnchor="202.0" AnchorPane.topAnchor="0.0"/>
+      <Circle fx:id="exitIndicator" fill="WHITE" layoutX="792.0" layoutY="13.0" radius="9.0" stroke="BLACK"
+              strokeType="INSIDE" AnchorPane.rightAnchor="101.0" AnchorPane.topAnchor="4.0"/>
+      <Circle fx:id="runningIndicator" fill="WHITE" layoutX="893.0" layoutY="13.0" radius="9.0" stroke="BLACK"
+              strokeType="INSIDE" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="4.0"/>
+      <Label layoutX="827.0" layoutY="1.0" prefHeight="25.0" prefWidth="57.0" text="Running:"
+             AnchorPane.rightAnchor="18.0" AnchorPane.topAnchor="1.0">
+         <font>
+            <Font size="13.0"/>
+         </font>
+      </Label>
+      <Label layoutX="719.0" prefHeight="25.0" prefWidth="64.0" text="Exit code:" AnchorPane.rightAnchor="119.0"
+             AnchorPane.topAnchor="0.0">
+         <font>
+            <Font size="13.0"/>
+         </font>
+      </Label>
+   </AnchorPane>
+   <SplitPane dividerPositions="0.7967213114754098" layoutX="10.0" layoutY="43.0" orientation="VERTICAL"
+              AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0"
+              AnchorPane.topAnchor="40.0">
+      <TextArea fx:id="scriptArea" prefHeight="480.0" prefWidth="896.0" text="print(&quot;hello world&quot;)"/>
+      <TextArea fx:id="outputArea" editable="false" prefHeight="124.0" prefWidth="896.0"/>
+   </SplitPane>
 </AnchorPane>
