@@ -3,34 +3,49 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.Circle?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.*?>
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-            minWidth="-Infinity" prefHeight="668.0" prefWidth="922.0" xmlns="http://javafx.com/javafx/17.0.2-ea"
-            fx:controller="smolscript.Controller">
+            minWidth="-Infinity" prefHeight="668.0" prefWidth="922.0" stylesheets="@style.css"
+            xmlns="http://javafx.com/javafx/17.0.2-ea" fx:controller="smolscript.Controller">
    <AnchorPane layoutX="10.0" layoutY="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0"
                AnchorPane.topAnchor="10.0">
       <Button mnemonicParsing="false" onAction="#onRunButtonClick" text="Run" AnchorPane.leftAnchor="0.0"
               AnchorPane.topAnchor="0.0"/>
-      <ProgressBar fx:id="progressBar" layoutX="257.0" prefHeight="25.0" prefWidth="450.0" progress="0.0"
-                   AnchorPane.leftAnchor="257.0" AnchorPane.rightAnchor="195.0" AnchorPane.topAnchor="0.0"/>
-      <TextField fx:id="numOfRunsField" layoutX="120.0" prefHeight="16.0" prefWidth="71.0" text="1"
-                 AnchorPane.leftAnchor="120.0" AnchorPane.topAnchor="0.0"/>
-      <Label layoutX="50.0" prefHeight="25.0" prefWidth="81.0" text="Run X times:" AnchorPane.leftAnchor="50.0"
-             AnchorPane.topAnchor="0.0"/>
-      <Button layoutX="202.0" mnemonicParsing="false" onAction="#onSaveButtonClick" text="Save"
-              AnchorPane.leftAnchor="202.0" AnchorPane.topAnchor="0.0"/>
-      <Circle fx:id="exitIndicator" fill="WHITE" layoutX="792.0" layoutY="13.0" radius="9.0" stroke="BLACK"
-              strokeType="INSIDE" AnchorPane.rightAnchor="101.0" AnchorPane.topAnchor="4.0"/>
-      <Circle fx:id="runningIndicator" fill="WHITE" layoutX="893.0" layoutY="13.0" radius="9.0" stroke="BLACK"
-              strokeType="INSIDE" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="4.0"/>
-      <Label layoutX="827.0" layoutY="1.0" prefHeight="25.0" prefWidth="57.0" text="Running:"
-             AnchorPane.rightAnchor="18.0" AnchorPane.topAnchor="1.0">
+      <Label layoutX="43.0" prefHeight="25.0" prefWidth="79.0" text="Run X times:" AnchorPane.leftAnchor="43.0"
+             AnchorPane.topAnchor="0.0">
          <font>
             <Font size="13.0"/>
          </font>
       </Label>
-      <Label layoutX="719.0" prefHeight="25.0" prefWidth="64.0" text="Exit code:" AnchorPane.rightAnchor="119.0"
+      <TextField fx:id="numOfRunsField" layoutX="122.0" prefHeight="16.0" prefWidth="71.0" text="1"
+                 AnchorPane.leftAnchor="122.0" AnchorPane.topAnchor="0.0"/>
+      <ProgressBar fx:id="progressBar" layoutX="257.0" prefHeight="26.0" prefWidth="349.0" progress="0.0"
+                   AnchorPane.leftAnchor="257.0" AnchorPane.rightAnchor="296.0" AnchorPane.topAnchor="0.0"/>
+      <Label layoutX="616.0" layoutY="3.0" text="Est. time:" AnchorPane.rightAnchor="234.0" AnchorPane.topAnchor="3.0">
+         <font>
+            <Font size="13.0"/>
+         </font>
+      </Label>
+      <Label fx:id="timeIndicator" layoutX="680.0" layoutY="3.0" text="-" AnchorPane.rightAnchor="191.0"
+             AnchorPane.topAnchor="3.0">
+         <font>
+            <Font size="13.0"/>
+         </font>
+      </Label>
+      <Label layoutX="723.0" prefHeight="25.0" prefWidth="64.0" text="Exit code:" AnchorPane.rightAnchor="115.0"
              AnchorPane.topAnchor="0.0">
+         <font>
+            <Font size="13.0"/>
+         </font>
+      </Label>
+      <Circle fx:id="exitIndicator" fill="WHITE" layoutX="796.0" layoutY="13.0" radius="9.0" stroke="BLACK"
+              strokeType="INSIDE" AnchorPane.rightAnchor="97.0" AnchorPane.topAnchor="4.0"/>
+      <Button layoutX="204.0" mnemonicParsing="false" onAction="#onSaveButtonClick" text="Save"
+              AnchorPane.leftAnchor="204.0" AnchorPane.topAnchor="0.0"/>
+      <Circle fx:id="runningIndicator" fill="WHITE" layoutX="887.0" layoutY="14.0" radius="9.0" stroke="BLACK"
+              strokeType="INSIDE" AnchorPane.rightAnchor="6.0" AnchorPane.topAnchor="5.0"/>
+      <Label layoutX="821.0" layoutY="1.0" prefHeight="25.0" prefWidth="57.0" text="Running:"
+             AnchorPane.rightAnchor="24.0" AnchorPane.topAnchor="1.0">
          <font>
             <Font size="13.0"/>
          </font>

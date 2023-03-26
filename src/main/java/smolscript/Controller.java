@@ -1,9 +1,7 @@
 package smolscript;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 
@@ -28,8 +26,19 @@ public class Controller {
     @FXML
     private TextField numOfRunsField;
 
+    @FXML
+    private Label timeIndicator;
 
+    private long scriptStartTime = 0;
+
+    private long weightedAverageRuntime = 0;
+
+    /**
+     * This function is called when launching to program.
+     * Sets up various GUI elements
+     */
     public void initialize() {
+        // Load script file into scriptArea (Gui) if one exists, otherwise insert hello world
         String text = "";
         try {
             text = new String(Files.readAllBytes(Paths.get("script.kts")));
@@ -42,6 +51,7 @@ public class Controller {
             scriptArea.setText("println(\"Hello World\")");
         }
 
+        // Set up TextBox for number of runs to only accept integers >= 1
         numOfRunsField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("[0-9]{0,8}")) {
                 numOfRunsField.setText(oldValue);
@@ -59,43 +69,87 @@ public class Controller {
         runScript();
     }
 
+    /**
+     * Runs the script that was previously saved to "script.kts"
+     */
     private void runScript() {
         outputArea.clear();
+        int numOfRuns = Integer.parseInt(numOfRunsField.getText());
 
+        // Check for OS and set command accordingly
         boolean isWindows = System.getProperty("os.name").toLowerCase().startsWith("windows");
+        ScriptTask task;
+        scriptStartTime = System.currentTimeMillis();
         if (isWindows) {
-            int numOfRuns = Integer.parseInt(numOfRunsField.getText());
-            ScriptTask task = new ScriptTask("cmd /c kotlinc -script script.kts", numOfRuns);
-            progressBar.progressProperty().bind(task.progressProperty());
-            task.messageProperty().addListener(((observable, oldValue, newValue) -> {
-                outputArea.setText(newValue);
-                // use append to get textArea to scroll to the bottom
-                outputArea.appendText("");
-            }));
-            task.valueProperty().addListener((observable, oldValue, newValue) -> {
-                if (newValue == null) {
-                    return;
-                }
-                switch (newValue) {
-                    case 1 -> setRunning();
-                    case 0 -> {
-                        setFinished();
-                        setSuccessfulExit();
-                    }
-                    case -1 -> {
-                        setFinished();
-                        setBadExit();
-                    }
-                }
-            });
-
-            Thread taskThread = new Thread(task);
-            taskThread.setDaemon(true);
-            taskThread.start();
+            task = new ScriptTask("cmd /c kotlinc -script script.kts", numOfRuns);
+        } else {
+            task = new ScriptTask("/bin/sh -c kotlinc -script script.kts", numOfRuns);
         }
-        // TODO implement for Linux
+
+        // Bind progress bar to progress in scriptTask
+        progressBar.progressProperty().bind(task.progressProperty());
+
+        // Display the output that is sent by the scriptTask
+        task.messageProperty().addListener(((observable, oldValue, newValue) -> {
+            outputArea.setText(newValue);
+            // use append to get textArea to scroll to the bottom
+            outputArea.appendText("");
+        }));
+
+        // Read values sent by scriptTask, which indicate the process status, and update GUI.
+        task.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue == null) {
+                return;
+            }
+            switch (newValue) {
+                case 2 -> {
+                    setFinished();
+                    setSuccessfulExit();
+                }
+                case 1 -> setRunning();
+                case -1 -> {
+                    setFinished();
+                    setBadExit();
+                }
+            }
+        });
+
+        // calculate and display estimated remaining time when progress is updated by scriptTask
+        task.progressProperty().addListener((observable, oldValue, newValue) -> {
+            long timeThisRun = System.currentTimeMillis() - scriptStartTime;
+
+            if (weightedAverageRuntime == 0) {
+                weightedAverageRuntime = timeThisRun;
+            } else {
+                // 50/50 weighting between newest run and all previous runs
+                weightedAverageRuntime = (timeThisRun + weightedAverageRuntime) / 2;
+            }
+
+            // display estimated time in seconds or minutes
+            float timeInSec = weightedAverageRuntime * (numOfRuns - (numOfRuns * newValue.floatValue())) / 1000;
+            if (timeInSec > 600) {
+                float timeInMin = timeInSec / 60;
+                timeIndicator.setText((long) timeInMin + " m");
+            } else {
+                timeIndicator.setText((long) timeInSec + " s");
+            }
+            // Reset variables
+            scriptStartTime = System.currentTimeMillis();
+            if (Math.abs(newValue.floatValue() - 1.0) < 0.000001) {
+                weightedAverageRuntime = 0;
+                scriptStartTime = 0;
+            }
+        });
+
+        //Start running the task
+        Thread taskThread = new Thread(task);
+        taskThread.setDaemon(true);
+        taskThread.start();
     }
 
+    /**
+     * Saves the text in scriptArea to the script file "script.kts"
+     */
     @FXML
     protected void onSaveButtonClick() {
         String code = scriptArea.getText();
@@ -108,7 +162,9 @@ public class Controller {
             writer.close();
         } catch (IOException e) {
             System.err.println("Error when writing to file!");
-            //TODO add error popup
+            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+            errorAlert.setHeaderText("Error when writing to file.");
+            errorAlert.showAndWait();
         }
     }
 
