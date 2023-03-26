@@ -1,7 +1,9 @@
 package smolscript;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 
@@ -21,6 +23,10 @@ public class Controller {
     private Circle exitIndicator;
     @FXML
     private Circle runningIndicator;
+    @FXML
+    private ProgressBar progressBar;
+    @FXML
+    private TextField numOfRunsField;
 
 
     public void initialize() {
@@ -35,6 +41,16 @@ public class Controller {
         } else {
             scriptArea.setText("println(\"Hello World\")");
         }
+
+        numOfRunsField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("[0-9]{0,8}")) {
+                numOfRunsField.setText(oldValue);
+            } else {
+                if (!newValue.equals("") && Integer.parseInt(newValue) < 1) {
+                    numOfRunsField.setText(oldValue);
+                }
+            }
+        });
     }
 
     @FXML
@@ -48,8 +64,9 @@ public class Controller {
 
         boolean isWindows = System.getProperty("os.name").toLowerCase().startsWith("windows");
         if (isWindows) {
-            // TODO Check num of executions
-            ScriptTask task = new ScriptTask("cmd /c kotlinc -script script.kts", 1);
+            int numOfRuns = Integer.parseInt(numOfRunsField.getText());
+            ScriptTask task = new ScriptTask("cmd /c kotlinc -script script.kts", numOfRuns);
+            progressBar.progressProperty().bind(task.progressProperty());
             task.messageProperty().addListener(((observable, oldValue, newValue) -> {
                 outputArea.setText(newValue);
                 // use append to get textArea to scroll to the bottom

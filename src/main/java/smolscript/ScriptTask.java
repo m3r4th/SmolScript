@@ -8,9 +8,9 @@ import java.io.InputStreamReader;
 
 public class ScriptTask extends Task<Integer> {
 
-    private String command;
+    private final String command;
 
-    private int numOfRuns;
+    private final int numOfRuns;
 
     public ScriptTask(String command, int numOfRuns) {
         this.command = command;
@@ -21,41 +21,42 @@ public class ScriptTask extends Task<Integer> {
     protected Integer call() throws Exception {
         // Run script
         Process scriptProcess;
-        try {
-            String currentPath = new File("").getAbsolutePath();
-            ProcessBuilder procBuilder = new ProcessBuilder(command.split(" "));
-            procBuilder.directory(new File(currentPath));
-            procBuilder.redirectErrorStream(true);
-            updateValue(1);
-            scriptProcess = procBuilder.start();
-        } catch (IOException e) {
-            System.err.println("Error on attempting to run script.");
-            e.printStackTrace();
-            return -1;
-        }
+        String currentPath = new File("").getAbsolutePath();
+        ProcessBuilder procBuilder = new ProcessBuilder(command.split(" "));
+        procBuilder.directory(new File(currentPath));
+        procBuilder.redirectErrorStream(true);
+        StringBuilder messageBuilder = new StringBuilder();
 
-        // Read script output
-        // TODO read std.err too
-        // TODO Send progress
-        try (InputStreamReader isr = new InputStreamReader(scriptProcess.getInputStream())) {
-            int c;
-            StringBuilder messageBuilder = new StringBuilder();
-            while ((c = isr.read()) >= 0) {
-                messageBuilder.append((char) c);
-                if (c == '\n') {
+        for (int i = 1; i <= numOfRuns; i++) {
+            updateValue(1);
+            try {
+                scriptProcess = procBuilder.start();
+            } catch (IOException e) {
+                System.err.println("Error on attempting to run script.");
+                e.printStackTrace();
+                return -1;
+            }
+
+            // Read script output
+            try (InputStreamReader isr = new InputStreamReader(scriptProcess.getInputStream())) {
+                int c;
+                while ((c = isr.read()) >= 0) {
+                    messageBuilder.append((char) c);
+                    if (c == '\n') {
+                        updateMessage(messageBuilder.toString());
+                    }
+                }
+                if (!messageBuilder.isEmpty()) {
                     updateMessage(messageBuilder.toString());
                 }
             }
-            if (!messageBuilder.isEmpty()) {
-                updateMessage(messageBuilder.toString());
+            scriptProcess.waitFor();
+            if (scriptProcess.exitValue() > 0) {
+                updateValue(-1);
+            } else {
+                updateValue(0);
             }
-            messageBuilder.setLength(0);
-        }
-        scriptProcess.waitFor();
-        if (scriptProcess.exitValue() > 0) {
-            updateValue(-1);
-        } else {
-            updateValue(0);
+            updateProgress(i, numOfRuns);
         }
         return null;
     }
