@@ -12,7 +12,7 @@ public class SmolScript extends Application {
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(SmolScript.class.getResource("view.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
-        stage.setTitle("SmolScript!");
+        stage.setTitle("SmolScript");
         stage.setScene(scene);
         stage.setMinHeight(500);
         stage.setMinWidth(700);
