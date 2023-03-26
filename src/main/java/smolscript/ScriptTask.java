@@ -23,8 +23,11 @@ public class ScriptTask extends Task<Integer> {
         Process scriptProcess;
         try {
             String currentPath = new File("").getAbsolutePath();
+            ProcessBuilder procBuilder = new ProcessBuilder(command.split(" "));
+            procBuilder.directory(new File(currentPath));
+            procBuilder.redirectErrorStream(true);
             updateValue(1);
-            scriptProcess = Runtime.getRuntime().exec(command, null, new File(currentPath));
+            scriptProcess = procBuilder.start();
         } catch (IOException e) {
             System.err.println("Error on attempting to run script.");
             e.printStackTrace();
