@@ -18,6 +18,14 @@ public class ScriptTask extends Task<Integer> {
      */
     private final int numOfRuns;
 
+    /**
+     * Value that is passed to application thread.
+     * 1st bit set indicates that value of 3rd bit should be used to update GUI
+     * 2nd bit set indicates script process is running
+     * 3rd bit set indicates bad exit of last script run
+     */
+    private int value = 0;
+
     public ScriptTask(String command, int numOfRuns) {
         this.command = command;
         this.numOfRuns = numOfRuns;
@@ -36,8 +44,9 @@ public class ScriptTask extends Task<Integer> {
         StringBuilder outputBuilder = new StringBuilder();
         // Run command for as many times, as specified by numOfRuns
         for (int i = 1; i <= numOfRuns; i++) {
-            // 1 indicates process is running
-            updateValue(1);
+            // set second bit, to indicate that the process is running to the application thread
+            value |= 2;
+            updateValue(value);
 
             // run the script
             try {
@@ -63,12 +72,19 @@ public class ScriptTask extends Task<Integer> {
             }
             // Wait for process to terminate and forward if exit code is ok
             scriptProcess.waitFor();
+            // unset second bit to indicate process stopped running
+            value &= 5;
+            //updateValue(value);
+            // set first bit to indicate valid exit value
+            value |= 1;
             if (scriptProcess.exitValue() != 0) {
-                // -1 Indicates bad exit
-                updateValue(-1);
+                // set third bit to indicate bad exit
+                value |= 4;
+                updateValue(value);
             } else {
-                // 2 Indicates successful exit
-                updateValue(2);
+                // unset third bit to indicate successful exit
+                value &= 3;
+                updateValue(value);
             }
             // update progress for progress bar and time estimation
             updateProgress(i, numOfRuns);

@@ -98,18 +98,21 @@ public class Controller {
 
         // Read values sent by scriptTask, which indicate the process status, and update GUI.
         task.valueProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue == null) {
+            if (newValue == null || newValue == 0) {
                 return;
             }
-            switch (newValue) {
-                case 2 -> {
-                    setFinished();
-                    setSuccessfulExit();
-                }
-                case 1 -> setRunning();
-                case -1 -> {
-                    setFinished();
+            // check if second bit is set, which indicates running script
+            if ((newValue & 2) > 0) {
+                setRunning();
+            } else {
+                setFinished();
+            }
+            // check if third bit is set, which indicates non-zero exit code
+            if ((newValue & 1) > 0) {
+                if ((newValue & 4) > 0) {
                     setBadExit();
+                } else {
+                    setSuccessfulExit();
                 }
             }
         });
@@ -121,7 +124,7 @@ public class Controller {
             if (weightedAverageRuntime == 0) {
                 weightedAverageRuntime = timeThisRun;
             } else {
-                // 50/50 weighting between newest run and all previous runs
+                // 50/50 weighting between the newest run and all previous runs
                 weightedAverageRuntime = (timeThisRun + weightedAverageRuntime) / 2;
             }
 
