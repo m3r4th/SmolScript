@@ -6,6 +6,11 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+/**
+ * Extension of JavaFX Task Class
+ * Runs the specified command for the specified number of times
+ * Updates the application thread about the process status
+ */
 public class ScriptTask extends Task<Integer> {
 
     /**
@@ -26,6 +31,12 @@ public class ScriptTask extends Task<Integer> {
      */
     private int value = 0;
 
+    /**
+     * Constructor of ScriptTask
+     *
+     * @param command   The command that should be executed by the task
+     * @param numOfRuns The number of times the command should be run
+     */
     public ScriptTask(String command, int numOfRuns) {
         this.command = command;
         this.numOfRuns = numOfRuns;
