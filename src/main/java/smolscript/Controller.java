@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
+import javafx.scene.text.Font;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -61,6 +62,8 @@ public class Controller {
                 }
             }
         });
+
+        scriptArea.setFont(Font.font("Jetbrains Mono", 13));
     }
 
     @FXML

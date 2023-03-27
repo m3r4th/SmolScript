@@ -59,9 +59,9 @@
             <Font name="JetBrains Mono Regular" size="13.0"/>
          </font>
       </TextArea>
-      <TextArea fx:id="outputArea" editable="false" prefHeight="124.0" prefWidth="896.0">
+      <TextArea fx:id="outputArea" editable="false" prefHeight="124.0" prefWidth="896.0" text="Welcome to SmolScript!">
          <font>
-            <Font size="13.0"/>
+            <Font name="JetBrains Mono Regular" size="13.0"/>
          </font>
       </TextArea>
    </SplitPane>
