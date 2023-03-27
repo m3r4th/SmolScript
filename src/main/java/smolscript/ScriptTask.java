@@ -63,7 +63,7 @@ public class ScriptTask extends Task<Integer> {
             }
             // Wait for process to terminate and forward if exit code is ok
             scriptProcess.waitFor();
-            if (scriptProcess.exitValue() < 0) {
+            if (scriptProcess.exitValue() != 0) {
                 // -1 Indicates bad exit
                 updateValue(-1);
             } else {

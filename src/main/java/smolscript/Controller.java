@@ -83,7 +83,7 @@ public class Controller {
         if (isWindows) {
             task = new ScriptTask("cmd /c kotlinc -script script.kts", numOfRuns);
         } else {
-            task = new ScriptTask("/bin/sh -c kotlinc -script script.kts", numOfRuns);
+            task = new ScriptTask("kotlinc -script script.kts", numOfRuns);
         }
 
         // Bind progress bar to progress in scriptTask
