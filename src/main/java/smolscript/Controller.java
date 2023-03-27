@@ -74,6 +74,9 @@ public class Controller {
      */
     private void runScript() {
         outputArea.clear();
+        if (numOfRunsField.getText().equals("")) {
+            numOfRunsField.setText("1");
+        }
         int numOfRuns = Integer.parseInt(numOfRunsField.getText());
 
         // Check for OS and set command accordingly
