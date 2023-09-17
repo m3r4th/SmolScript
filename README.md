@@ -1,5 +1,6 @@
 # SmolScript
 Basic tool to write and run Kotlin scripts.
+
 Created as test-task for JetBrains.
 
 Written in Java using JavaFX
